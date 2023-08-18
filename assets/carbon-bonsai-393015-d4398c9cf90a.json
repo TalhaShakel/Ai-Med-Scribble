@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "carbon-bonsai-393015",
+  "private_key_id": "d4398c9cf90a5145b46341fcc3c8dffc5812b229",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDZKOo47cxc+xuo\nH/iU/ZFn7d/PJ6X1NO4QvfAiQAs1ly23kCpH9f8rVb781k8cSbWQf5mF+LReLoyq\n/uHLQnQmRU636exXPLQda9ijVVDXRE26KbAmFK23d43Q2xMtOexzCcqc+S7Q63cH\njmkjH+3aaLRho0n3TIfXye7mjIUqfEy6yEUQezqyhHDKWtrD8Q9Sgtw2XLh4ToVT\nUyZ4glPD50D2ky17mUeAW1KO9xOc9KNM426XbpcWGuNc3CFekVgC/xvS7wMa7vHY\njEJOu+/LfE2yzb/COPTU8o1nJ0dZanXlN772VomG6pAnbZtp9/OpPkdMQnDiTHCn\nmWqaXemfAgMBAAECggEADya0JNGukwQwG0xTvy1r4jjuBxmIkjGltIRUB0e5oH0S\nQv7rfEbVDVR3tVNMhLg90z2b3AWMrA+KX/nVjiVuTidCxUEsbK+/D1hxbn/q2oIY\n/DahZB7IOgc83UgTr/GdJi+WM9qM4iWzkdLlUf6NzVHF2BQY+oib57nekbZXKi4O\nEvzRLA24sm1K75eT7fsAaQ0N1v/VNBxv6nAWAK3sK3GawFKpMsVjDas6hI5IbjYq\nnXVOdWwYgYiBxEuR5cZ38OQtpOdFu0aH9KYrpx7Aym5xzfCbNQxh2EQuNA3k3rhF\nKJWqOeP5WRCq2ui7TmweIQYM/Sy5sujJjDD4jqnRWQKBgQDu3E2Im71GsWmzwZNM\nSQ28XiAkcLC/q31P+pJDLtB6JmbsUA6COcjn1n9rrnYcyI/2aNgxcMK7Q8o5WMuO\nJthlQMQwJ5oTNySuI2nLHxkWx9f8L2j4xOuPLU0kftAB5u12+2TQyb2LHs7sVDQK\n0QSbGFQqgwJueEWdeZO26BRViQKBgQDovfwyZk2oTT9HDGPQkbwHAWeRHDfCfvWn\ngsytKWT9D/qmrOCupenp3S7kV3WEADm+PWAXdYaaekZm17t210rk2pPo5LHseM/9\nfWut8/WZ70cH8/XUwOpcvqCYvDfBQX3tJUq5kkld+V10/N/OSVBA2QP6SRywVHHK\nTpsIc/sj5wKBgQDehYH9qAj22MS+X7HXuZ8AQzfyesFObnZ5kde8mtpBUZFEyXga\nvbZ6tQtTx93lBruHNTljJcdkKc01C5Hmxi2GdoXOzrXs/MxBJmCiiEAZRufh2lES\noHFKm0tomnMxsm67D4xmLetUtcjTxcYN5ZdC3bFbQV18iLNh9yczmJWI8QKBgQDk\nDBvL6m/XI/GHlT1MRS++kYLALaz5F1tuifwxA6lfSMPpguUYW5tqOf5TYNrVvz7V\nB+BavB5qyLqo1GNsG6HXwdBB16v6r5nkoHrc1HjnHwwzX7iVgX1h6KsFXQ8ofhp8\nPhkM4aifutH26jwFLdLD56A9IlxI7kUc3I6N5s7CKwKBgHtH2W3fyk7/NIDhC96j\nmGVHUR4pNFWqM+RxevaMjFvPL+tIKHh1HGZD8csUANvewMU4Pnkg6aDrfy5ouJNd\ncb1po6Taz23rwIuF2Jhq+YQ1GRTUXDZuGJ/5sS3cE5J8c/pxnD6orsaB1wtRV3cw\nOHbewR72BCaVYczQh2tokZW3\n-----END PRIVATE KEY-----\n",
+  "client_email": "ai-powered-medical@carbon-bonsai-393015.iam.gserviceaccount.com",
+  "client_id": "113427635678739784077",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ai-powered-medical%40carbon-bonsai-393015.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
