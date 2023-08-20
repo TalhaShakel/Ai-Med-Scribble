@@ -1,8 +1,10 @@
 import 'package:aimedscribble/screens/auth/sign_up.dart';
 import 'package:aimedscribble/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
+import '../../uitilities/FIrebaseServices.dart';
 import '../../uitilities/colors.dart';
 import '../../widgets/auth_button.dart';
 import '../../widgets/auth_icon_button.dart';
@@ -18,6 +20,16 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FirebaseServices _firebaseServices = FirebaseServices();
+  void _handleLogin() {
+    _firebaseServices.login(
+      _emailController,
+      _passwordController,
+      context,
+    );
+    // EasyLoading.showSuccess("Done");
+  }
+
   GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(); // Add GlobalKey for the Form
 
@@ -100,29 +112,7 @@ class _LoginState extends State<Login> {
                           borderColor: Colors.white,
                           textColor: Colors.white,
                           text: 'Sign In',
-                          function: () {
-                            print(
-                                "object"); // Check if the email is equal to "jasmel@gmail.com"
-                            if (_formKey.currentState!.validate()) {
-                              // Check if the email is equal to "jasmel@gmail.com"
-                              if (_emailController.text.trim() ==
-                                  "jasmel@gmail.com") {
-                                // Navigate to Dashboard screen
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Dashboard(),
-                                  ),
-                                );
-                              } else {
-                                Get.snackbar("Error",
-                                    "Email and password is not correct",
-                                    backgroundColor: Colors.red);
-                                // Handle other cases (e.g., show an error message)
-                                // ...
-                              }
-                            }
-                          },
+                          function: _handleLogin,
                         ),
                       ),
                       const Align(

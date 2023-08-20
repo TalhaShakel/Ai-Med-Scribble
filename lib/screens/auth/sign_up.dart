@@ -1,6 +1,8 @@
 import 'package:aimedscribble/screens/auth/login.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../uitilities/FIrebaseServices.dart';
 import '../../uitilities/colors.dart';
 import '../../widgets/auth_button.dart';
 import '../../widgets/auth_icon_button.dart';
@@ -16,7 +18,69 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  final FirebaseServices _firebaseServices = FirebaseServices();
+  String? _validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Confirm Password is required';
+    }
+    if (value != _passwordController.text) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
+  String? _validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Name is required';
+    }
+    // You can add more custom validation rules for the name if needed
+    return null;
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+    if (!value.contains('@')) {
+      return 'Please enter a valid email address';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password is required';
+    }
+    if (value.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+    return null;
+  }
+
+  void _handleRegistration() {
+    if (_formKey.currentState!.validate()) {
+      if (_passwordController.text != _confirmPasswordController.text) {
+        Get.snackbar("Error", "Passwords do not match",
+            backgroundColor: Colors.red);
+        return; // Exit function if passwords don't match
+      }
+      _firebaseServices.Registration(
+        _emailController,
+        _passwordController,
+        _nameController,
+        context,
+      );
+    }
+  }
+
   final bool _isLoading = false;
+  GlobalKey<FormState> _formKey =
+      GlobalKey<FormState>(); // Add GlobalKey for the Form
 
   @override
   void dispose() {
@@ -36,153 +100,171 @@ class _SignUpState extends State<SignUp> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                            color: textColor,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 50,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    TextFieldInput(
-                      iconPath: "assets/email_perso.png",
-                      hintText: 'Email',
-                      textInputType: TextInputType.text,
-                      textEditingController: _passwordController,
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    TextFieldInput(
-                      iconPath: "assets/lock.png",
-                      hintText: 'Password',
-                      textInputType: TextInputType.text,
-                      textEditingController: _passwordController,
-                      isPass: true,
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    TextFieldInput(
-                      iconPath: "assets/lock.png",
-                      hintText: 'Confirm Password',
-                      textInputType: TextInputType.text,
-                      textEditingController: _passwordController,
-                      isPass: true,
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    SizedBox(
-                        height: 60,
-                        width: screenWidth,
-                        child: AuthButton(
-                          backgroundColor: blueColor,
-                          borderColor: Colors.white,
-                          textColor: Colors.white,
-                          text: 'Sign Up',
-                          function: () {},
-                        )),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    const Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "or",
-                        style: TextStyle(
-                          color: text2Color,
-                          fontSize: 13,
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          "Sign Up",
+                          style: TextStyle(
+                              color: textColor,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "If you have an account ",
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      TextFieldInput(
+                        validator: _validateName,
+                        iconPath: "assets/email_perso.png",
+                        hintText: 'Name',
+                        textInputType: TextInputType.text,
+                        textEditingController: _nameController,
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      TextFieldInput(
+                        validator: _validateEmail,
+                        iconPath: "assets/email_perso.png",
+                        hintText: 'Email',
+                        textInputType: TextInputType.text,
+                        textEditingController: _emailController,
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      TextFieldInput(
+                        validator: _validatePassword,
+                        iconPath: "assets/lock.png",
+                        hintText: 'Password',
+                        textInputType: TextInputType.text,
+                        textEditingController: _passwordController,
+                        isPass: true,
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      TextFieldInput(
+                        validator:
+                            _validateConfirmPassword, // Use the new validation function
+
+                        iconPath: "assets/lock.png",
+                        hintText: 'Confirm Password',
+                        textInputType: TextInputType.text,
+                        textEditingController: _confirmPasswordController,
+                        isPass: true,
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      SizedBox(
+                          height: 60,
+                          width: screenWidth,
+                          child: AuthButton(
+                            backgroundColor: blueColor,
+                            borderColor: Colors.white,
+                            textColor: Colors.white,
+                            text: 'Sign Up',
+                            function: _handleRegistration,
+                          )),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "or",
                           style: TextStyle(
                             color: text2Color,
                             fontSize: 13,
                           ),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Login(),
-                                  ));
-                            },
-                            child: const Text(
-                              "Sign In",
-                              style: TextStyle(
-                                color: blueColor,
-                                fontSize: 13,
-                              ),
-                            )),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                    SizedBox(
-                        height: 60,
-                        width: screenWidth,
-                        child: AuthIconButton(
-                          backgroundColor: Colors.white,
-                          borderColor: text2Color,
-                          textColor: text2Color,
-                          text: 'Sign up with Google',
-                          function: () {},
-                          iconPath: "assets/google.png",
-                        )),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                    SizedBox(
-                        height: 60,
-                        width: screenWidth,
-                        child: AuthIconButton(
-                          backgroundColor: Colors.white,
-                          borderColor: text2Color,
-                          textColor: text2Color,
-                          text: 'Sign up with Microsoft',
-                          function: () {},
-                          iconPath: "assets/lmicrosoft.png",
-                        )),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                    SizedBox(
-                        height: 60,
-                        width: screenWidth,
-                        child: AuthIconButton(
-                          backgroundColor: Colors.white,
-                          borderColor: text2Color,
-                          textColor: text2Color,
-                          text: 'Sign up with Apple',
-                          function: () {},
-                          iconPath: "assets/apple.png",
-                        )),
-                  ],
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "If you have an account ",
+                            style: TextStyle(
+                              color: text2Color,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const Login(),
+                                    ));
+                              },
+                              child: const Text(
+                                "Sign In",
+                                style: TextStyle(
+                                  color: blueColor,
+                                  fontSize: 13,
+                                ),
+                              )),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 35,
+                      ),
+                      SizedBox(
+                          height: 60,
+                          width: screenWidth,
+                          child: AuthIconButton(
+                            backgroundColor: Colors.white,
+                            borderColor: text2Color,
+                            textColor: text2Color,
+                            text: 'Sign up with Google',
+                            function: () {},
+                            iconPath: "assets/google.png",
+                          )),
+                      const SizedBox(
+                        height: 35,
+                      ),
+                      SizedBox(
+                          height: 60,
+                          width: screenWidth,
+                          child: AuthIconButton(
+                            backgroundColor: Colors.white,
+                            borderColor: text2Color,
+                            textColor: text2Color,
+                            text: 'Sign up with Microsoft',
+                            function: () {},
+                            iconPath: "assets/lmicrosoft.png",
+                          )),
+                      const SizedBox(
+                        height: 35,
+                      ),
+                      SizedBox(
+                          height: 60,
+                          width: screenWidth,
+                          child: AuthIconButton(
+                            backgroundColor: Colors.white,
+                            borderColor: text2Color,
+                            textColor: text2Color,
+                            text: 'Sign up with Apple',
+                            function: () {},
+                            iconPath: "assets/apple.png",
+                          )),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:aimedscribble/widgets/details_widget.dart';
 import 'package:aimedscribble/widgets/liveStream_widget.dart';
 import 'package:aimedscribble/widgets/report_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
