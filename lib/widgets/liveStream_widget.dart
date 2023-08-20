@@ -250,204 +250,191 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
               child: SizedBox(
                 width: screenWidth * 0.5,
                 height: screenHeight,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 80,
-                      width: screenWidth,
-                      decoration: const BoxDecoration(
-                          color: blueColor,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10))),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.02),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 80,
+                        width: screenWidth,
+                        decoration: const BoxDecoration(
+                            color: blueColor,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10))),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.02),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Speech to Text",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              AvatarGlow(
+                                animate: isListening,
+                                glowColor: Colors.blue.shade200,
+                                duration: const Duration(milliseconds: 2000),
+                                repeatPauseDuration:
+                                    const Duration(milliseconds: 100),
+                                repeat: true,
+                                endRadius: 25.0,
+                                child: IconButton(
+                                    onPressed: isListening
+                                        ? _stopListening
+                                        : startListening,
+                                    icon: Icon(isListening
+                                        ? Icons.mic
+                                        : Icons.mic_off)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 20),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              "Speech to Text",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                    onTap: () async {
+                                      try {
+                                        //                                         String prompt =
+                                        //                                             """
+                                        // generate soap notes of this conversation which is between doctor and patient
+                                        //            conversation: ${transcription.text}
+                                        //            """;
+                                        String prompt =
+                                            """
+                Generate SOAP (Subjective, Objective, Assessment, Plan) notes along with relevant CPT (Current Procedural Terminology) codes based on the provided conversation between a doctor and a patient:
+                
+                *Conversation:
+                ${transcription.text}
+              
+                Your ability to accurately capture and organize this information, including CPT codes, will determine the quality of the generated SOAP notes and ensure proper billing and coding for medical services.
+                """;
+                                        print("Transcription Text: " +
+                                            transcription.text);
+
+                                        String prompt2 =
+                                            """
+                  Extract the following information from this conversation:
+                
+                  *Vital Signs:
+                  *Symptoms:
+                  *CPT (Current Procedural Terminology) codes:
+                  *ICD-10 Diagnosis Codes (DX):
+                  *Medications:
+                  *Tests:
+                
+                  Conversation: ${transcription.text}
+                """;
+                                        print("Prompt2: " + prompt2);
+
+                                        Get.snackbar("Fetching soap notes...",
+                                            "Please wait...");
+
+                                        List<Chat> chatList =
+                                            await submitGetChatsForm(
+                                          context: context,
+                                          prompt: prompt,
+                                          tokenValue: 100,
+                                        );
+                                        print("soap notes:" +
+                                            chatList.toString());
+
+                                        Get.snackbar("Fetching vital signs...",
+                                            "Please wait...");
+
+                                        List<Chat> chatList2 =
+                                            await submitGetChatsForm(
+                                          context: context,
+                                          prompt: prompt2,
+                                          tokenValue: 100,
+                                        );
+                                        print("vital signs:" +
+                                            chatList2.toString());
+                                        GlobalVariables.updateOutput(chatList
+                                            .map((e) => e.msg)
+                                            .toList());
+                                        GlobalVariables.updateOutput2(chatList2
+                                            .map((e) => e.msg)
+                                            .toList());
+
+                                        Get.snackbar(
+                                            "Updating UI...", "Please wait...");
+                                        Get.offAll(() => Dashboard());
+
+                                        setState(() {});
+                                        Get.snackbar("Update complete",
+                                            "Data has been updated successfully");
+                                      } catch (e) {
+                                        print("An error occurred: $e");
+                                        Get.snackbar("An error occurred",
+                                            "Please try again",
+                                            backgroundColor: Colors.red,
+                                            colorText: Colors.white,
+                                            duration: Duration(seconds: 3));
+                                      }
+                                    },
+                                    child:
+                                        Image.asset("assets/solar_hambur.png")),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Image.asset("assets/replayrounded.png"),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Image.asset("assets/play-arrow-rounded.png"),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Image.asset("assets/forwardrounded.png"),
+                              ],
                             ),
-                            AvatarGlow(
-                              animate: isListening,
-                              glowColor: Colors.blue.shade200,
-                              duration: const Duration(milliseconds: 2000),
-                              repeatPauseDuration:
-                                  const Duration(milliseconds: 100),
-                              repeat: true,
-                              endRadius: 25.0,
-                              child: IconButton(
-                                  onPressed: isListening
-                                      ? _stopListening
-                                      : startListening,
-                                  icon: Icon(
-                                      isListening ? Icons.mic : Icons.mic_off)),
-                            ),
+                            Image.asset("assets/volume-up-fill.png"),
                           ],
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 25, vertical: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                                  onTap: () async {
-                                    try {
-//                                         String prompt =
-//                                             """
-// generate soap notes of this conversation which is between doctor and patient
-//            conversation: ${transcription.text}
-//            """;
-                                      String prompt =
-                                          """
-Generate SOAP (Subjective, Objective, Assessment, Plan) notes along with relevant CPT (Current Procedural Terminology) codes based on the provided conversation between a doctor and a patient:
-
-**Conversation:**
-${transcription.text}
-
-**Please extract the following information:**
-
-**Subjective:**
-- Patient's reported symptoms, including any discomfort, pain, or concerns.
-- Any relevant medical history shared by the patient.
-
-**Objective:**
-- Vital signs such as temperature, blood pressure, pulse, and any other measurable data.
-
-**Assessment:**
-- Potential diagnoses or conditions based on the symptoms and medical history.
-
-**Plan:**
-- Recommended medications, treatments, or further tests to address the patient's condition.
-- Relevant CPT codes for the planned procedures.
-
-Your ability to accurately capture and organize this information, including CPT codes, will determine the quality of the generated SOAP notes and ensure proper billing and coding for medical services.
-""";
-                                      print("Transcription Text: " +
-                                          transcription.text);
-
-                                      String prompt2 =
-                                          """
-  Extract the following information from this conversation:
-
-  **Vital Signs:**
-  **Symptoms:**
-  **Medications:**
-  **Tests:**
-
-  Conversation: ${transcription.text}
-""";
-                                      print("Prompt2: " + prompt2);
-
-                                      Get.snackbar("Fetching soap notes...",
-                                          "Please wait...");
-
-                                      List<Chat> chatList =
-                                          await submitGetChatsForm(
-                                        context: context,
-                                        prompt: prompt,
-                                        tokenValue: 100,
-                                      );
-                                      print(
-                                          "soap notes:" + chatList.toString());
-
-                                      Get.snackbar("Fetching vital signs...",
-                                          "Please wait...");
-
-                                      List<Chat> chatList2 =
-                                          await submitGetChatsForm(
-                                        context: context,
-                                        prompt: prompt2,
-                                        tokenValue: 100,
-                                      );
-                                      print("vital signs:" +
-                                          chatList2.toString());
-                                      GlobalVariables.updateOutput(
-                                          chatList.map((e) => e.msg).toList());
-                                      GlobalVariables.updateOutput2(
-                                          chatList2.map((e) => e.msg).toList());
-
-                                      Get.snackbar(
-                                          "Updating UI...", "Please wait...");
-                                      Get.offAll(() => Dashboard());
-
-                                      setState(() {});
-                                      Get.snackbar("Update complete",
-                                          "Data has been updated successfully");
-                                    } catch (e) {
-                                      print("An error occurred: $e");
-                                      Get.snackbar("An error occurred",
-                                          "Please try again",
-                                          backgroundColor: Colors.red,
-                                          colorText: Colors.white,
-                                          duration: Duration(seconds: 3));
-                                    }
-                                  },
-                                  child:
-                                      Image.asset("assets/solar_hambur.png")),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Image.asset("assets/replayrounded.png"),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Image.asset("assets/play-arrow-rounded.png"),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Image.asset("assets/forwardrounded.png"),
-                            ],
-                          ),
-                          Image.asset("assets/volume-up-fill.png"),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 10),
-                      child: Text(speech!.isListening == true
-                          ? recognizedText
-                          : isListening
-                              ? recognizedText
-                              : 'Tap the microphone to start listening...'),
-                    ),
-                    Container(
+                      Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 10),
-                        child:
-                            // Wrap(
-                            //   spacing: 8.0,
-                            //   runSpacing: 8.0,
-                            //   children: previousRecognizedText
-                            //       .map((item) =>
-                            Column(
-                          children: [
-                            TextFormField(
-                              maxLength: null, maxLines: null,
-                              decoration: InputDecoration(
-                                hintText: "Dr and patient Speech to text",
-                              ),
-                              // readOnly: true,
-                              controller: transcription,
+                        child: Text(speech!.isListening == true
+                            ? recognizedText
+                            : isListening
+                                ? recognizedText
+                                : 'Tap the microphone to start listening...'),
+                      ),
+                      Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 10),
+                          child:
+                              // Wrap(
+                              //   spacing: 8.0,
+                              //   runSpacing: 8.0,
+                              //   children: previousRecognizedText
+                              //       .map((item) =>
+                              TextFormField(
+                            maxLength: null, maxLines: null,
+                            decoration: InputDecoration(
+                              hintText: "Dr and patient Speech to text",
                             ),
-                          ],
-                        )
-                        // )
-                        // .toList(),
-                        // ),
-                        ),
-                  ],
+                            // readOnly: true,
+                            controller: transcription,
+                          )
+                          // )
+                          // .toList(),
+                          // ),
+                          ),
+                    ],
+                  ),
                 ),
               ),
             ),
