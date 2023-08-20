@@ -1,4 +1,5 @@
 import 'package:aimedscribble/screens/auth/login.dart';
+import 'package:aimedscribble/screens/welcome/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -91,7 +92,7 @@ class MyApp extends StatelessWidget {
                   return Dashboard(); // Replace with your Dashboard widget
                 } else {
                   // User is not logged in, show the Login screen
-                  return Login();
+                  return WelcomeScreen();
                 }
               }
               // Show a loading indicator if the connection is not yet active
