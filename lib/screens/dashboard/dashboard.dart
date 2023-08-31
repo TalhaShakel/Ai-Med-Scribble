@@ -1,3 +1,4 @@
+import 'package:aimedscribble/screens/welcome/welcome_screen.dart';
 import 'package:aimedscribble/widgets/Client_widget.dart';
 import 'package:aimedscribble/widgets/details_widget.dart';
 import 'package:aimedscribble/widgets/liveStream_widget.dart';
@@ -7,8 +8,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../uitilities/colors.dart';
 import '../../widgets/text_field_input.dart';
+import '../welcome/welcome_screen.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -59,7 +63,7 @@ class _DashboardState extends State<Dashboard> {
           actions: [
             Image.asset("assets/tittle.png"),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 10),
               child: SizedBox(
                 width: screenWidth * 0.35,
                 child: TextFieldInput(
@@ -71,19 +75,30 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
             ),
-            Image.asset("assets/help.png"),
-            Image.asset("assets/notification.png"),
-            const Padding(
+            10.widthBox,
+
+            // Image.asset("assets/help.png"),
+            // Image.asset("assets/notification.png"),
+
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 18),
               child: Text(
-                "Dr.Jhon",
+                "${FirebaseAuth.instance.currentUser?.email}",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 13,
                 ),
               ),
             ),
-            Image.asset("assets/profile.png"),
+            10.widthBox,
+            GestureDetector(
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                  Get.offAll(() => WelcomeScreen());
+                },
+                child: Icon(Icons.logout_outlined)),
+            10.widthBox,
+            // Image.asset("assets/profile.png"),
           ],
         ),
         body: Container(
@@ -96,8 +111,8 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   if (Get.width >= 600) ClientWidget() else Container(),
                   10.widthBox,
-                  if (Get.width >= 800) ReportWidget() else Container(),
-                  10.widthBox,
+                  // if (Get.width >= 800) ReportWidget() else Container(),
+                  // 10.widthBox,
                   Expanded(child: DetailsWidget()),
                   10.widthBox,
                   Expanded(child: LiveStreamWidget()),

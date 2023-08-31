@@ -33,11 +33,11 @@ class _DetailsWidgetState extends State<DetailsWidget> {
             style:
                 GoogleFonts.urbanist(fontSize: 18, fontWeight: FontWeight.w900),
           ),
-          Text(
-            'Build',
-            style:
-                GoogleFonts.urbanist(fontSize: 18, fontWeight: FontWeight.w900),
-          ),
+          // Text(
+          //   'Build',
+          //   style:
+          //       GoogleFonts.urbanist(fontSize: 18, fontWeight: FontWeight.w900),
+          // ),
           Text(
             'Review',
             style:
@@ -47,7 +47,7 @@ class _DetailsWidgetState extends State<DetailsWidget> {
         views: [
           OrganizeWidget(
               output: GlobalVariables.output, output2: GlobalVariables.output2),
-          Text('data-2'),
+          // Text('data-2'),
           Text('data-3'),
         ],
         onChange: (index) => print(index),

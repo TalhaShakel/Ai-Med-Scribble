@@ -2,6 +2,7 @@ import 'package:aimedscribble/checking.dart';
 import 'package:aimedscribble/screens/dashboard/dashboard.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../uitilities/colors.dart';
@@ -310,8 +311,7 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                         // generate soap notes of this conversation which is between doctor and patient
                                         //            conversation: ${transcription.text}
                                         //            """;
-                                        String prompt =
-                                            """
+                                        String prompt = """
                 Generate SOAP (Subjective, Objective, Assessment, Plan) notes along with relevant CPT (Current Procedural Terminology) codes based on the provided conversation between a doctor and a patient:
                 
                 *Conversation:
@@ -322,23 +322,39 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                         print("Transcription Text: " +
                                             transcription.text);
 
-                                        String prompt2 =
-                                            """
+                                        String prompt2 = """
                   Extract the following information from this conversation:
                 
                   *Vital Signs:
                   *Symptoms:
-                  *CPT (Current Procedural Terminology) codes:
-                  *ICD-10 Diagnosis Codes (DX):
                   *Medications:
                   *Tests:
                 
                   Conversation: ${transcription.text}
+                  
                 """;
                                         print("Prompt2: " + prompt2);
 
-                                        Get.snackbar("Fetching soap notes...",
-                                            "Please wait...");
+                                        String prompt3 =
+                                            """Given the conversation between a doctor and a patient, extract the relevant CPT codes based on the medical procedures discussed:
+                                Conversation: ${transcription.text} 
+
+                                Extract the relevant CPT codes discussed in the conversation along with their corresponding short medical procedures.
+
+""";
+                                        String prompt4 =
+                                            """Given the conversation between a doctor and a patient, extract the relevant DX (diagnosis) codes based on the medical conditions discussed:
+
+                                Conversation: ${transcription.text} 
+
+                                Extract the relevant DX codes discussed in the conversation along with their corresponding medical conditions.
+
+""";
+                                        EasyLoading.show(
+                                            status:
+                                                "Fetching data 60 seconds wait...");
+                                        // Get.snackbar("Fetching soap notes...",
+                                        //     "Please wait...");
 
                                         List<Chat> chatList =
                                             await submitGetChatsForm(
@@ -349,8 +365,10 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                         print("soap notes:" +
                                             chatList.toString());
 
-                                        Get.snackbar("Fetching vital signs...",
-                                            "Please wait...");
+                                        // Get.snackbar("Fetching vital signs...",
+                                        //     "Please wait...");
+                                        await Future.delayed(
+                                            Duration(seconds: 20));
 
                                         List<Chat> chatList2 =
                                             await submitGetChatsForm(
@@ -360,20 +378,51 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                         );
                                         print("vital signs:" +
                                             chatList2.toString());
+                                        await Future.delayed(
+                                            Duration(seconds: 20));
+
+                                        List<Chat> chatList3 =
+                                            await submitGetChatsForm(
+                                          context: context,
+                                          prompt: prompt3,
+                                          tokenValue: 100,
+                                        );
+                                        print("CPT Codes:" +
+                                            chatList3.toString());
+                                        await Future.delayed(
+                                            Duration(seconds: 20));
+
+                                        List<Chat> chatList4 =
+                                            await submitGetChatsForm(
+                                          context: context,
+                                          prompt: prompt4,
+                                          tokenValue: 100,
+                                        );
+                                        print(
+                                            "DX Codes:" + chatList4.toString());
+
                                         GlobalVariables.updateOutput(chatList
                                             .map((e) => e.msg)
                                             .toList());
                                         GlobalVariables.updateOutput2(chatList2
                                             .map((e) => e.msg)
                                             .toList());
-
-                                        Get.snackbar(
-                                            "Updating UI...", "Please wait...");
+                                        GlobalVariables.updateOutput3(chatList3
+                                            .map((e) => e.msg)
+                                            .toList());
+                                        GlobalVariables.updateOutput4(chatList4
+                                            .map((e) => e.msg)
+                                            .toList());
+                                        // Get.snackbar(
+                                        //     "Updating UI...", "Please wait...");
                                         Get.offAll(() => Dashboard());
 
                                         setState(() {});
-                                        Get.snackbar("Update complete",
+                                        EasyLoading.showSuccess(
                                             "Data has been updated successfully");
+
+                                        // Get.snackbar("Update complete",
+                                        //     "Data has been updated successfully");
                                       } catch (e) {
                                         print("An error occurred: $e");
                                         Get.snackbar("An error occurred",
@@ -448,6 +497,8 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
 class GlobalVariables {
   static List<String> output2 = [];
   static List<String> output = [];
+  static List<String> output3 = [];
+  static List<String> output4 = [];
 
   static void updateOutput(List<String> newData) {
     output = newData;
@@ -457,5 +508,15 @@ class GlobalVariables {
   static void updateOutput2(List<String> newData) {
     output2 = newData;
     print("output2" + newData.toString());
+  }
+
+  static void updateOutput3(List<String> newData) {
+    output3 = newData;
+    print("output3" + newData.toString());
+  }
+
+  static void updateOutput4(List<String> newData) {
+    output4 = newData;
+    print("output3" + newData.toString());
   }
 }

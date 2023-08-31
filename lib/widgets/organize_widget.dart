@@ -72,6 +72,59 @@ class _OrganizeWidgetState extends State<OrganizeWidget> {
                       ))
                   .toList(),
             ),
+            SizedBox(height: 16), // Added SizedBox for spacing
+            Column(
+              children: GlobalVariables.output3
+                  .map((alldata) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          elevation: 8,
+                          color: primaryColor,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TextFormField(
+                              maxLines: null,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                label: "CPT Codes".text.make(),
+                                hintText: "CPT Codes.",
+                              ),
+                              controller: TextEditingController(
+                                  text: alldata.toString()),
+                            ),
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            ),
+            SizedBox(height: 16), // Added SizedBox for spacing
+            Column(
+              children: GlobalVariables.output4
+                  .map((alldata) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          elevation: 8,
+                          color: primaryColor,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TextFormField(
+                              maxLines: null,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                label: "DX Daignose".text.make(),
+                                hintText: "DX Daignose.",
+                              ),
+                              controller: TextEditingController(
+                                  text: alldata.toString()),
+                            ),
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            ),
+            SizedBox(height: 16), // Added SizedBox for spacing
           ],
         ),
       ),
