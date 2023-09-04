@@ -1,4 +1,5 @@
 import 'package:aimedscribble/screens/auth/login.dart';
+import 'package:aimedscribble/uitilities/global_variable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -29,6 +30,7 @@ class FirebaseServices {
     TextEditingController emailController,
     TextEditingController passwordController,
     BuildContext context,
+    String imagevalue,
   ) async {
     try {
       EasyLoading.show(status: 'Please wait...');
@@ -40,6 +42,8 @@ class FirebaseServices {
       Map<String, dynamic>? data = await getUserData(userCredential.user!.uid);
       globaluserdata = UserModel.fromMap(data!);
       print(globaluserdata!.email.toString());
+      imagevalue = globaluserdata!.profileImageURL;
+      
 
       // Successful sign-in, navigate to the Dashboard or perform desired actions
       // Get.snackbar("Success", "Successful sign-in",
@@ -99,6 +103,9 @@ class FirebaseServices {
         password: passwordController
             .text, // Store password securely, this is just an example
       );
+
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const Login()));
       print('User Model Information:');
       print('Address: ${user.address}');
       print('Image ID: ${user.imageid}');

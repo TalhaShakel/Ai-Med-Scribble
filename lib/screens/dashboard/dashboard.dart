@@ -1,5 +1,7 @@
 import 'package:aimedscribble/Models/UserModel.dart';
+import 'package:aimedscribble/screens/auth/editProfile.dart';
 import 'package:aimedscribble/screens/welcome/welcome_screen.dart';
+import 'package:aimedscribble/uitilities/global_variable.dart';
 import 'package:aimedscribble/widgets/Client_widget.dart';
 import 'package:aimedscribble/widgets/details_widget.dart';
 import 'package:aimedscribble/widgets/liveStream_widget.dart';
@@ -25,6 +27,10 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final TextEditingController _searchController = TextEditingController();
+  
+
+  
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -89,14 +95,29 @@ class _DashboardState extends State<Dashboard> {
                     10.widthBox,
 
                     // Image.asset("assets/help.png"),
-                    Image.network(
-                        "https://firebasestorage.googleapis.com/v0/b/ai-med-scribble-c6e43.appspot.com/o/profile%2Fd0263500-8792-1cc2-8e88-a7e136149c24?alt=media&token=a857956b-26f6-42e7-a3d5-ae5c1cb3a680"),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EditProfile()));
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey.shade600,
+                            image:
+                                DecorationImage(image: NetworkImage(myImage))),
+                      ),
+                    ),
+                    10.widthBox,
 
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 18),
                       child: Text(
-                        // "${globaluserdata?.address} ${globaluserdata?.displayName} ${globaluserdata?.profileImageURL}",
-                        "${globaluserdata?.address}",
+                        "${globaluserdata?.displayName}",
                         style: TextStyle(
                           color: textColor,
                           fontSize: 13,

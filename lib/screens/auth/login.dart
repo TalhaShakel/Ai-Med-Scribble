@@ -1,5 +1,7 @@
+import 'package:aimedscribble/Models/UserModel.dart';
 import 'package:aimedscribble/screens/auth/sign_up.dart';
 import 'package:aimedscribble/screens/dashboard/dashboard.dart';
+import 'package:aimedscribble/uitilities/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -26,7 +28,12 @@ class _LoginState extends State<Login> {
       _emailController,
       _passwordController,
       context,
+      myImage,
     );
+    setState(() {
+      myImage = globaluserdata!.profileImageURL;
+      print('my Image $myImage');
+    });
     // EasyLoading.showSuccess("Done");
   }
 
