@@ -7,9 +7,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Models/UserModel.dart';
 import '../screens/dashboard/dashboard.dart';
 
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
 class FirebaseServices {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<void> saveUserData(String? uid, data) async {
     try {
       if (uid != null && uid.isNotEmpty) {
@@ -36,6 +37,9 @@ class FirebaseServices {
         email: emailController.text.trim(),
         password: passwordController.text,
       );
+      Map<String, dynamic>? data = await getUserData(userCredential.user!.uid);
+      globaluserdata = UserModel.fromMap(data!);
+      print(globaluserdata!.email.toString());
 
       // Successful sign-in, navigate to the Dashboard or perform desired actions
       // Get.snackbar("Success", "Successful sign-in",
@@ -43,7 +47,9 @@ class FirebaseServices {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Dashboard(),
+          builder: (context) => Dashboard(
+              // userdata: globaluserdata!
+              ),
         ),
       );
       EasyLoading.showSuccess("Successful sign-in");
@@ -62,29 +68,49 @@ class FirebaseServices {
     TextEditingController emailController,
     TextEditingController passwordController,
     name,
+    imageid,
+    String profileImageURL,
     BuildContext context,
+    TextEditingController address,
   ) async {
     try {
-      EasyLoading.show(status: 'Please wait...');
+      print("start user registeration");
 
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text,
       );
+      print("complete user registeration");
+      print('Address: $address');
+      print('Image ID: $imageid');
+      print('UID: ${userCredential.user!.uid}');
+      print('Email: ${emailController.text}');
+      print('Display Name: ${name.text}');
+      print('Profile Image URL: $profileImageURL'); // Default profile image URL
+      print('Password: ${passwordController.text}');
       UserModel user = UserModel(
+        address: address.text,
+        imageid: imageid,
         uid: userCredential.user!.uid,
         email: emailController.text,
         displayName: name.text,
-        profileImageURL:
-            'https://example.com/profile.jpg', // Default profile image URL
+        profileImageURL: profileImageURL, // Default profile image URL
         password: passwordController
             .text, // Store password securely, this is just an example
       );
+      print('User Model Information:');
+      print('Address: ${user.address}');
+      print('Image ID: ${user.imageid}');
+      print('UID: ${user.uid}');
+      print('Email: ${user.email}');
+      print('Display Name: ${user.displayName}');
+      print('Profile Image URL: ${user.profileImageURL}');
+      print('Password: ${user.password}');
+      print("store user datar");
 
-      await saveUserData(user.uid, user);
+      await saveUserData(user.uid, user.toMap());
       // Registration successful, navigate to the Login screen or perform desired actions
-      EasyLoading.showSuccess('Registration successful!...');
 
       // Get.snackbar("Success", "Registration successful!",
       //     backgroundColor: Colors.green);
@@ -102,5 +128,26 @@ class FirebaseServices {
       }
       Get.snackbar("Error", errorMessage, backgroundColor: Colors.red);
     }
+  }
+}
+
+getUserData(String? uid) async {
+  try {
+    if (uid != null && uid.isNotEmpty) {
+      DocumentSnapshot userSnapshot =
+          await _firestore.collection('users').doc(uid).get();
+      if (userSnapshot.exists) {
+        return userSnapshot.data() as Map<String, dynamic>;
+      } else {
+        // User document does not exist
+        return null;
+      }
+    } else {
+      // Invalid UID
+      return null;
+    }
+  } catch (e) {
+    print('Error fetching user data: $e');
+    return null;
   }
 }

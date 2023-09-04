@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../uitilities/colors.dart';
+import '../Models/UserModel.dart';
 import '../uitilities/aimodelservice.dart';
 
 class LiveStreamWidget extends StatefulWidget {
@@ -415,7 +416,9 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                             .toList());
                                         // Get.snackbar(
                                         //     "Updating UI...", "Please wait...");
-                                        Get.offAll(() => Dashboard());
+                                        Get.offAll(() => Dashboard(
+                                              // userdata: globaluserdata!,
+                                            ));
 
                                         setState(() {});
                                         EasyLoading.showSuccess(
