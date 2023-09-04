@@ -30,29 +30,32 @@ class WelcomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          width: 103.w,
-                          height: 100.h,
-                          child: RichText(
-                              text: const TextSpan(
-                                  text: "AI\n",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xffFBBC05)),
-                                  children: [
-                                TextSpan(
-                                    text: "Medical\n",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff4285F4))),
-                                TextSpan(
-                                    text: "Scribe",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xffFBBC05))),
-                              ])),
+                          height: 150,
+                          width: 150,
+                          // width: 103.w,
+                          // height: 100.h,
+                          child: Image.asset('assets/logo-no-background.png'),
+                          // RichText(
+                          //     text: const TextSpan(
+                          //         text: "AI\n",
+                          //         style: TextStyle(
+                          //             fontSize: 20,
+                          //             fontWeight: FontWeight.bold,
+                          //             color: Color(0xffFBBC05)),
+                          //         children: [
+                          //       TextSpan(
+                          //           text: "Medical\n",
+                          //           style: TextStyle(
+                          //               fontSize: 20,
+                          //               fontWeight: FontWeight.bold,
+                          //               color: Color(0xff4285F4))),
+                          //       TextSpan(
+                          //           text: "Scribe",
+                          //           style: TextStyle(
+                          //               fontSize: 20,
+                          //               fontWeight: FontWeight.bold,
+                          //               color: Color(0xffFBBC05))),
+                          //     ])),
                         ),
                         Container(
                           width: 115.w,

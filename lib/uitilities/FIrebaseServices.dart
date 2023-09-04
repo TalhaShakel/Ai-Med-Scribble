@@ -43,7 +43,6 @@ class FirebaseServices {
       globaluserdata = UserModel.fromMap(data!);
       print(globaluserdata!.email.toString());
       imagevalue = globaluserdata!.profileImageURL;
-      
 
       // Successful sign-in, navigate to the Dashboard or perform desired actions
       // Get.snackbar("Success", "Successful sign-in",
@@ -64,6 +63,7 @@ class FirebaseServices {
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
+      print('Error Still:: $errorMessage');
       Get.snackbar("Error", errorMessage, backgroundColor: Colors.red);
     }
   }
@@ -133,7 +133,8 @@ class FirebaseServices {
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
-      Get.snackbar("Error", errorMessage, backgroundColor: Colors.red);
+      print('Error Still:: $errorMessage');
+      // Get.snackbar("Error", errorMessage, backgroundColor: Colors.red);
     }
   }
 }

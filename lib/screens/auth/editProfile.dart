@@ -30,7 +30,7 @@ class _SignUpState extends State<EditProfile> {
   final FirebaseServices _firebaseServices = FirebaseServices();
   Uint8List? _image;
   String photoUrl =
-      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+      "https://static.vecteezy.com/system/resources/previews/005/520/145/original/cartoon-drawing-of-a-doctor-vector.jpg";
 
   selectImage() async {
     Uint8List? im = await pickImage(ImageSource.gallery);
@@ -83,6 +83,18 @@ class _SignUpState extends State<EditProfile> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.arrow_back,color: Colors.black,))
+                      ],
+                    ),
+                    const SizedBox(
                       height: 50,
                     ),
                     const Padding(
@@ -109,9 +121,7 @@ class _SignUpState extends State<EditProfile> {
                               )
                             : CircleAvatar(
                                 radius: 64,
-                                backgroundImage: NetworkImage(
-                                    globaluserdata!.profileImageURL),
-                                // backgroundImage: NetworkImage('${photoUrl}'),
+                                backgroundImage: NetworkImage('${photoUrl}'),
                                 backgroundColor: Colors.grey,
                               ),
                         Positioned(

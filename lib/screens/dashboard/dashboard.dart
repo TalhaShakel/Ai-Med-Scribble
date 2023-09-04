@@ -27,9 +27,8 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final TextEditingController _searchController = TextEditingController();
-  
-
-  
+  String networkImage =
+      'https://static.vecteezy.com/system/resources/previews/005/520/145/original/cartoon-drawing-of-a-doctor-vector.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +108,7 @@ class _DashboardState extends State<Dashboard> {
                             shape: BoxShape.circle,
                             color: Colors.grey.shade600,
                             image:
-                                DecorationImage(image: NetworkImage(myImage))),
+                                DecorationImage(image: NetworkImage(networkImage))),
                       ),
                     ),
                     10.widthBox,
