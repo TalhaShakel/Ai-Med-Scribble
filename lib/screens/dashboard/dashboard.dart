@@ -1,5 +1,5 @@
 import 'package:aimedscribble/Models/UserModel.dart';
-import 'package:aimedscribble/screens/auth/editProfile.dart';
+import 'package:aimedscribble/screens/auth/Profile.dart';
 import 'package:aimedscribble/screens/welcome/welcome_screen.dart';
 import 'package:aimedscribble/uitilities/global_variable.dart';
 import 'package:aimedscribble/widgets/Client_widget.dart';
@@ -107,8 +107,8 @@ class _DashboardState extends State<Dashboard> {
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.grey.shade600,
-                            image:
-                                DecorationImage(image: NetworkImage(networkImage))),
+                            image: DecorationImage(
+                                image: NetworkImage(networkImage))),
                       ),
                     ),
                     10.widthBox,

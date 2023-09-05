@@ -91,7 +91,10 @@ class _SignUpState extends State<EditProfile> {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            icon: const Icon(Icons.arrow_back,color: Colors.black,))
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.black,
+                            ))
                       ],
                     ),
                     const SizedBox(
@@ -165,13 +168,13 @@ class _SignUpState extends State<EditProfile> {
                     const SizedBox(
                       height: 40,
                     ),
-                    TextFieldInput(
-                      iconPath: "assets/lock.png",
-                      hintText: 'Password',
-                      textInputType: TextInputType.text,
-                      textEditingController: _passwordController,
-                      isPass: true,
-                    ),
+                    // TextFieldInput(
+                    //   iconPath: "assets/lock.png",
+                    //   hintText: 'Password',
+                    //   textInputType: TextInputType.text,
+                    //   textEditingController: _passwordController,
+                    //   isPass: true,
+                    // ),
                     const SizedBox(
                       height: 40,
                     ),
