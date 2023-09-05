@@ -12,6 +12,21 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class FirebaseServices {
+  updateUserData(String uid, data) async {
+    try {
+      EasyLoading.show(status: 'Please wait...');
+
+      final userRef = FirebaseFirestore.instance.collection('users').doc(uid);
+      await userRef.update(data);
+      EasyLoading.showSuccess("Data updated successfully");
+
+      print('Data updated successfully for user with UID: $uid');
+    } catch (error) {
+      EasyLoading.dismiss();
+      print('Error updating data for user with UID: $uid - $error');
+    }
+  }
+
   Future<void> saveUserData(String? uid, data) async {
     try {
       if (uid != null && uid.isNotEmpty) {

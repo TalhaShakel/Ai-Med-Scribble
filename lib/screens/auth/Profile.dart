@@ -2,9 +2,12 @@ import 'dart:typed_data';
 
 import 'package:aimedscribble/Models/UserModel.dart';
 import 'package:aimedscribble/screens/auth/login.dart';
+import 'package:aimedscribble/uitilities/contant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../uitilities/FIrebaseServices.dart';
 import '../../uitilities/colors.dart';
@@ -85,34 +88,44 @@ class _SignUpState extends State<EditProfile> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(
-                              Icons.arrow_back,
-                              color: Colors.black,
-                            ))
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        "Edit Profile",
-                        style: TextStyle(
-                            color: textColor,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold),
+                    ListTile(
+                      titleAlignment: ListTileTitleAlignment.center,
+                      title: "Profile".text.make(),
+                      trailing: Image.asset(
+                        "$applogo",
+                        height: 100.h,
                       ),
+                      leading: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.black,
+                          )),
                     ),
-                    const SizedBox(
-                      height: 40,
-                    ),
+
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [],
+                    // ),
+                    // const SizedBox(
+                    //   height: 50,
+                    // ),
+
+                    // const Padding(
+                    //   padding: EdgeInsets.symmetric(horizontal: 15),
+                    //   child: Text(
+                    //     " Profile",
+                    //     style: TextStyle(
+                    //         color: textColor,
+                    //         fontSize: 25,
+                    //         fontWeight: FontWeight.bold),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   height: 40,
+                    // ),
                     Stack(
                       // alignment: AlignmentDirectional.topEnd,
                       children: [
@@ -185,8 +198,17 @@ class _SignUpState extends State<EditProfile> {
                           backgroundColor: blueColor,
                           borderColor: Colors.white,
                           textColor: Colors.white,
-                          text: 'Submit',
-                          function: () {},
+                          text: 'Update',
+                          function: () {
+                            globaluserdata?.displayName = _nameController.text;
+                            globaluserdata?.address = address.text;
+
+                            FirebaseServices().updateUserData(
+                                globaluserdata!.uid, {
+                              "displayName": _nameController.text,
+                              "address": address.text
+                            });
+                          },
                         )),
                     const SizedBox(
                       height: 40,

@@ -1,9 +1,9 @@
 class UserModel {
-  final String uid;
-  final String email;
-  final String displayName;
-  final String profileImageURL; // New field for profile image
-  final String password; // New field for password
+   String uid;
+   String email;
+    String displayName;
+   String profileImageURL; // New field for profile image
+   String password; // New field for password
   String imageid;
   String address;
 
