@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:aimedscribble/Models/UserModel.dart';
 import 'package:aimedscribble/screens/auth/login.dart';
+import 'package:aimedscribble/screens/dashboard/dashboard.dart';
 import 'package:aimedscribble/uitilities/contant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -42,7 +43,10 @@ class _SignUpState extends State<EditProfile> {
       setState(() {
         _image = im;
       });
-
+photoUrl = await StorageMethods().uploadImageToStorage(
+          "profile",
+          _image!,
+        );
       // Upload the image to Firebase Storage
     } else {
       // Handle the case where no image was selected
@@ -97,7 +101,8 @@ class _SignUpState extends State<EditProfile> {
                       ),
                       leading: IconButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            // Navigator.pop(context);
+                            Get.offAll(() => Dashboard());
                           },
                           icon: const Icon(
                             Icons.arrow_back,
@@ -199,15 +204,20 @@ class _SignUpState extends State<EditProfile> {
                           borderColor: Colors.white,
                           textColor: Colors.white,
                           text: 'Update',
-                          function: () {
+                          function: () async {
                             globaluserdata?.displayName = _nameController.text;
                             globaluserdata?.address = address.text;
 
                             FirebaseServices().updateUserData(
                                 globaluserdata!.uid, {
+                                  
                               "displayName": _nameController.text,
                               "address": address.text
                             });
+                            Map<String, dynamic>? data =
+                                await getUserData(globaluserdata!.uid);
+                            globaluserdata = UserModel.fromMap(data!);
+                            setState(() {});
                           },
                         )),
                     const SizedBox(
