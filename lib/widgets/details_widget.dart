@@ -1,6 +1,7 @@
 import 'package:aimedscribble/uitilities/colors.dart';
 import 'package:aimedscribble/widgets/liveStream_widget.dart';
 import 'package:aimedscribble/widgets/organize_widget.dart';
+import 'package:aimedscribble/widgets/review.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -48,7 +49,8 @@ class _DetailsWidgetState extends State<DetailsWidget> {
           OrganizeWidget(
               output: GlobalVariables.output, output2: GlobalVariables.output2),
           // Text('data-2'),
-          Text('data-3'),
+          // Text('data-3'),
+          Review()
         ],
         onChange: (index) => print(index),
       ),

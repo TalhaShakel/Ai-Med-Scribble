@@ -1,10 +1,13 @@
 import 'package:aimedscribble/checking.dart';
 import 'package:aimedscribble/screens/dashboard/dashboard.dart';
+import 'package:aimedscribble/uitilities/utils.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:velocity_x/velocity_x.dart';
 import '../../uitilities/colors.dart';
 import '../Models/UserModel.dart';
 import '../uitilities/aimodelservice.dart';
@@ -23,9 +26,21 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
   TextEditingController transcription = TextEditingController();
   String recognizedText = "";
   String previousRecognizedText = '';
+  int autoListenStart = 0;
 
   Color iconColor = Colors.black;
   Icon playIcon = const Icon(Icons.play_arrow);
+  final chatGPT = ChatGPT(openApiKey: OPEN_API_KEY);
+
+  String generatedText = '';
+
+  // generateText(prompt) async {
+  //   final text = await chatGPT.generateText('$prompt');
+
+  //   setState(() {
+  //     generatedText = text;
+  //   });
+  // }
 
   @override
   void initState() {
@@ -35,6 +50,8 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
 
   void startListening() async {
     // Get.snackbar("Speech recognition status: $isListening", "");
+    autoListenStart++;
+    print(autoListenStart);
 
     if (!isListening) {
       bool available = await speech!.initialize(
@@ -42,22 +59,41 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
           // Get.snackbar("Speech recognition status: $status", "");
           print('Speech recognition status: $status');
           if (status == stt.SpeechToText.listeningStatus) {
+            // autoListenStart++;
+
             isListening = true;
             // update();
+          } else if (status == stt.SpeechToText.notListeningStatus) {
+            if (autoListenStart > 0) {
+              autoListenStart++;
+              // previousRecognizedText += recognizedText;
+              // transcription.text = previousRecognizedText;
+              _stopListening();
+              Future.delayed(Duration(seconds: 2), () {
+                if (!isListening) {
+                  startListening();
+                }
+              });
+              print(" autoListenStart != 0:    $autoListenStart");
+            }
+
+            // startListening();
           } else {
-            isListening = false;
+            _stopListening();
           }
         },
         onError: (error) {
-          print('Speech recognition error: ${error}');
           // showErrorSnackbar(error.errorMsg);
           isListening = false;
           // update();
-          Future.delayed(Duration(seconds: 1), () {
+          _stopListening();
+
+          Future.delayed(Duration(seconds: 2), () {
             if (!isListening) {
               startListening();
             }
           });
+          print('Speech recognition error: ${error}');
         },
       );
 
@@ -66,7 +102,9 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
         isListening = true;
 
         speech!.listen(
-          listenFor: Duration(minutes: 10),
+          // cancelOnError: false,
+          // pauseFor: Duration(minutes: 1),
+          listenFor: Duration(minutes: 100),
           onResult: (result) {
             setState(() {});
             recognizedText = "";
@@ -82,12 +120,16 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
 
   void _stopListening() async {
     if (isListening) {
-      print('Listening stopped.');
-      isListening = false;
-      previousRecognizedText += recognizedText;
-      transcription.text = previousRecognizedText;
-      // update();
-      speech!.stop();
+      autoListenStart = 0;
+      if (autoListenStart == 0) {
+        print('Listening stopped.');
+        isListening = false;
+        previousRecognizedText += recognizedText;
+        transcription.text = previousRecognizedText;
+        // update();
+        speech!.stop();
+      }
+
       setState(() {});
     }
   }
@@ -312,18 +354,33 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                         // generate soap notes of this conversation which is between doctor and patient
                                         //            conversation: ${transcription.text}
                                         //            """;
-                                        String prompt = """
-                Generate SOAP (Subjective, Objective, Assessment, Plan) notes along with relevant CPT (Current Procedural Terminology) codes based on the provided conversation between a doctor and a patient:
+                                        String prompt =
+                                            """
+                Generate SOAP (*Subjective, *Objective, *Assessment, *Plan) notes in short from the following conversation between a doctor and a patient:
                 
-                *Conversation:
+                Note: Your ability to accurately capture and organize all this information in four main headings,
+
+this is the four main Headings:
+
+                *Subjective,
+
+                *Objective,
+
+                *Assessment,
+
+                *Plan 
+
+
+
+Conversation:
                 ${transcription.text}
-              
-                Your ability to accurately capture and organize this information, including CPT codes, will determine the quality of the generated SOAP notes and ensure proper billing and coding for medical services.
-                """;
+
+                """; // Your ability to accurately capture and organize this information,  will determine the quality of the generated SOAP notes and ensure proper billing and coding for medical services.
                                         print("Transcription Text: " +
                                             transcription.text);
 
-                                        String prompt2 = """
+                                        String prompt2 =
+                                            """
                   Extract the following information from this conversation:
                 
                   *Vital Signs:
@@ -361,7 +418,7 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                             await submitGetChatsForm(
                                           context: context,
                                           prompt: prompt,
-                                          tokenValue: 100,
+                                          tokenValue: 200,
                                         );
                                         print("soap notes:" +
                                             chatList.toString());
@@ -417,7 +474,7 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                         // Get.snackbar(
                                         //     "Updating UI...", "Please wait...");
                                         Get.offAll(() => Dashboard(
-                                              // userdata: globaluserdata!,
+                                            // userdata: globaluserdata!,
                                             ));
 
                                         setState(() {});
@@ -440,18 +497,47 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                 const SizedBox(
                                   width: 20,
                                 ),
-                                Image.asset("assets/replayrounded.png"),
+                                // Icon(Icons.place),
+                                TextButton(
+                                    onPressed: () {
+                                      startListening();
+                                    },
+                                    child: "Start".text.make()),
+
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Image.asset("assets/play-arrow-rounded.png"),
+                                TextButton(
+                                    onPressed: () {
+                                      _stopListening();
+                                    },
+                                    child: "Stop".text.make()),
+
+                                // Image.asset("assets/play-arrow-rounded.png"),
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Image.asset("assets/forwardrounded.png"),
+                                TextButton(
+                                    onPressed: () {
+                                      transcription.clear();
+                                      // setState(() {});
+                                    },
+                                    child: "Cleartext".text.make()),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      Clipboard.setData(ClipboardData(
+                                          text: transcription.text));
+                                      showSnackBar(context, 'Text copied!');
+                                    },
+                                    child: "Copy".text.make()),
+
+                                // Image.asset("assets/forwardrounded.png"),
                               ],
                             ),
-                            Image.asset("assets/volume-up-fill.png"),
+                            // Image.asset("assets/volume-up-fill.png"),
                           ],
                         ),
                       ),

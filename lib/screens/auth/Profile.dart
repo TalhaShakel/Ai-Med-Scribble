@@ -4,6 +4,7 @@ import 'package:aimedscribble/Models/UserModel.dart';
 import 'package:aimedscribble/screens/auth/login.dart';
 import 'package:aimedscribble/screens/dashboard/dashboard.dart';
 import 'package:aimedscribble/uitilities/contant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +18,8 @@ import '../../widgets/auth_button.dart';
 import '../../widgets/auth_icon_button.dart';
 import '../../widgets/text_field_input.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../welcome/welcome_screen.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -43,10 +46,10 @@ class _SignUpState extends State<EditProfile> {
       setState(() {
         _image = im;
       });
-photoUrl = await StorageMethods().uploadImageToStorage(
-          "profile",
-          _image!,
-        );
+      photoUrl = await StorageMethods().uploadImageToStorage(
+        "profile",
+        _image!,
+      );
       // Upload the image to Firebase Storage
     } else {
       // Handle the case where no image was selected
@@ -186,13 +189,12 @@ photoUrl = await StorageMethods().uploadImageToStorage(
                     const SizedBox(
                       height: 40,
                     ),
-                    // TextFieldInput(
-                    //   iconPath: "assets/lock.png",
-                    //   hintText: 'Password',
-                    //   textInputType: TextInputType.text,
-                    //   textEditingController: _passwordController,
-                    //   isPass: true,
-                    // ),
+                    TextButton(
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                          Get.offAll(() => WelcomeScreen());
+                        },
+                        child: Text("LogOut")),
                     const SizedBox(
                       height: 40,
                     ),
@@ -210,7 +212,6 @@ photoUrl = await StorageMethods().uploadImageToStorage(
 
                             FirebaseServices().updateUserData(
                                 globaluserdata!.uid, {
-                                  
                               "displayName": _nameController.text,
                               "address": address.text
                             });
@@ -220,6 +221,7 @@ photoUrl = await StorageMethods().uploadImageToStorage(
                             setState(() {});
                           },
                         )),
+
                     const SizedBox(
                       height: 40,
                     ),

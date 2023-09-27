@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../uitilities/contant.dart';
+
 class OrganizeWidget extends StatefulWidget {
   var output;
   var output2;
@@ -22,107 +24,112 @@ class _OrganizeWidgetState extends State<OrganizeWidget> {
           children: [
             SizedBox(height: 16), // Added SizedBox for spacing
             Column(
-              children: GlobalVariables.output
-                  .map((alldata) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          elevation: 8,
-                          color: primaryColor,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TextFormField(
-                              maxLines: null,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                label: "Soap Notes".text.make(),
-                                hintText: "Soap Notes",
-                              ),
-                              controller: TextEditingController(
-                                  text: alldata.toString()),
-                            ),
-                          ),
+              children: GlobalVariables.output.map((alldata) {
+                pdftext +=
+                    '${alldata.toString().trim()}\n\n\n'; // Add alldata as a paragraph
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 8,
+                    color: primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: TextFormField(
+                        maxLines: null,
+                        style: TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                          label: "Soap Notes".text.make(),
+                          hintText: "Soap Notes",
                         ),
-                      ))
-                  .toList(),
+                        controller:
+                            TextEditingController(text: alldata.toString()),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
             SizedBox(height: 16), // Added SizedBox for spacing
             Column(
-              children: GlobalVariables.output2
-                  .map((alldata) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          elevation: 8,
-                          color: primaryColor,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TextFormField(
-                              maxLines: null,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                label: "Vital signs".text.make(),
-                                hintText: "Vital signs",
-                              ),
-                              controller: TextEditingController(
-                                  text: alldata.toString()),
-                            ),
-                          ),
+              children: GlobalVariables.output2.map((alldata) {
+                pdftext +=
+                    '${alldata.trim().toString()}\n\n\n'; // Add alldata as a paragraph
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 8,
+                    color: primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: TextFormField(
+                        maxLines: null,
+                        style: TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                          label: "Vital signs".text.make(),
+                          hintText: "Vital signs",
                         ),
-                      ))
-                  .toList(),
+                        controller:
+                            TextEditingController(text: alldata.toString()),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
             SizedBox(height: 16), // Added SizedBox for spacing
             Column(
-              children: GlobalVariables.output3
-                  .map((alldata) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          elevation: 8,
-                          color: primaryColor,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TextFormField(
-                              maxLines: null,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                label: "CPT Codes".text.make(),
-                                hintText: "CPT Codes.",
-                              ),
-                              controller: TextEditingController(
-                                  text: alldata.toString()),
-                            ),
-                          ),
+              children: GlobalVariables.output3.map((alldata) {
+                pdftext +=
+                    '${alldata.toString().trim()}\n\n\n'; // Add alldata as a paragraph
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 8,
+                    color: primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: TextFormField(
+                        maxLines: null,
+                        style: TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                          label: "CPT Codes".text.make(),
+                          hintText: "CPT Codes.",
                         ),
-                      ))
-                  .toList(),
+                        controller:
+                            TextEditingController(text: alldata.toString()),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
             SizedBox(height: 16), // Added SizedBox for spacing
             Column(
-              children: GlobalVariables.output4
-                  .map((alldata) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          elevation: 8,
-                          color: primaryColor,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TextFormField(
-                              maxLines: null,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                label: "DX Daignose".text.make(),
-                                hintText: "DX Daignose.",
-                              ),
-                              controller: TextEditingController(
-                                  text: alldata.toString()),
-                            ),
-                          ),
+              children: GlobalVariables.output4.map((alldata) {
+                pdftext +=
+                    '${alldata.toString().trim()}\n'; // Add alldata as a paragraph
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 8,
+                    color: primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: TextFormField(
+                        maxLines: null,
+                        style: TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                          label: "DX Daignose".text.make(),
+                          hintText: "DX Daignose.",
                         ),
-                      ))
-                  .toList(),
+                        controller:
+                            TextEditingController(text: alldata.toString()),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
             SizedBox(height: 16), // Added SizedBox for spacing
           ],

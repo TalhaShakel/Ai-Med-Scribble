@@ -118,6 +118,8 @@ class MyApp extends StatelessWidget {
                   // });
 
                   // User is logged in, navigate to Dashboard
+                  return Dashboard();
+
                   return Dashboard(
                       // userdata: globaluserdata,
                       ); // Replace with your Dashboard widget

@@ -84,20 +84,23 @@ class _DashboardState extends State<Dashboard> {
             ],
           ),
           actions: [
-            Image.asset("assets/tittle.png"),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: SizedBox(
-                width: screenWidth * 0.35,
-                child: TextFieldInput(
-                  iconPath: "assets/search.png",
-                  hintText: 'Search',
-                  textInputType: TextInputType.text,
-                  textEditingController: _searchController,
-                  isSearch: true,
-                ),
-              ),
+            Image.asset(
+              "assets/logo-no-background.png",
+              height: 35,
             ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(vertical: 10),
+            //   child: SizedBox(
+            //     width: screenWidth * 0.35,
+            //     child: TextFieldInput(
+            //       iconPath: "assets/search.png",
+            //       hintText: 'Search',
+            //       textInputType: TextInputType.text,
+            //       textEditingController: _searchController,
+            //       isSearch: true,
+            //     ),
+            //   ),
+            // ),
             10.widthBox,
 
             // Image.asset("assets/help.png"),
@@ -130,13 +133,13 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
             10.widthBox,
-            GestureDetector(
-                onTap: () {
-                  FirebaseAuth.instance.signOut();
-                  Get.offAll(() => WelcomeScreen());
-                },
-                child: Icon(Icons.logout_outlined)),
-            10.widthBox,
+            // GestureDetector(
+            //     onTap: () {
+            //       FirebaseAuth.instance.signOut();
+            //       Get.offAll(() => WelcomeScreen());
+            //     },
+            //     child: Icon(Icons.logout_outlined)),
+            // 10.widthBox,
             // Image.asset("assets/profile.png"),
           ],
         ),

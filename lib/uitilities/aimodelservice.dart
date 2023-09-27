@@ -3,8 +3,9 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 
-String OPEN_API_KEY = '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';
+String OPEN_API_KEY = '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';
 String BASE_URL = 'https://api.openai.com/v1/';
+
 Future<List<Chat>> submitGetChatsForm({
   required BuildContext context,
   required String prompt,

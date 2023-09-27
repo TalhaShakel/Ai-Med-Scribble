@@ -50,8 +50,11 @@ dependencies:
   get: ^4.6.5
   flutter_easyloading: ^3.0.5
   firebase_storage: ^11.2.6
-  uuid: ^4.0.0
+  uuid: ^3.0.5
   icons_launcher: ^2.1.0
+  syncfusion_flutter_pdf: ^22.2.12
+  syncfusion_flutter_pdfviewer: ^22.2.12
+
 
 flutter_launcher_icons:
   android: true
