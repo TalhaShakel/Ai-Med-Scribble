@@ -1,3 +1,4 @@
+import 'package:aimedscribble/checking.dart';
 import 'package:aimedscribble/screens/auth/login.dart';
 import 'package:aimedscribble/screens/auth/sign_up.dart';
 import 'package:aimedscribble/screens/welcome/welcome_screen.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:firebase_core/firebase_core.dart';
 import 'Models/UserModel.dart';
+import 'Secondapp/Homepage.dart';
 import 'firebase_options.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -118,14 +120,14 @@ class MyApp extends StatelessWidget {
                   // });
 
                   // User is logged in, navigate to Dashboard
-                  return Dashboard();
+                  return Sechomepage();
 
                   return Dashboard(
                       // userdata: globaluserdata,
                       ); // Replace with your Dashboard widget
                 } else {
                   // User is not logged in, show the Login screen
-                  return WelcomeScreen();
+                  return Sechomepage();
                 }
               }
               // Show a loading indicator if the connection is not yet active

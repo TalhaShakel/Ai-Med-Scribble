@@ -30,7 +30,7 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
 
   Color iconColor = Colors.black;
   Icon playIcon = const Icon(Icons.play_arrow);
-  final chatGPT = ChatGPT(openApiKey: OPEN_API_KEY);
+  // final chatGPT = ChatGPT(openApiKey: OPEN_API_KEY);
 
   String generatedText = '';
 
@@ -121,6 +121,7 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
   void _stopListening() async {
     if (isListening) {
       autoListenStart = 0;
+      
       if (autoListenStart == 0) {
         print('Listening stopped.');
         isListening = false;
@@ -354,8 +355,8 @@ class _LiveStreamWidgetState extends State<LiveStreamWidget> {
                                         // generate soap notes of this conversation which is between doctor and patient
                                         //            conversation: ${transcription.text}
                                         //            """;
-                                        String prompt =
-                                            """
+                                        // getOpenAIResponse(transcription);
+                                        String prompt = """
                 Generate SOAP (*Subjective, *Objective, *Assessment, *Plan) notes in short from the following conversation between a doctor and a patient:
                 
                 Note: Your ability to accurately capture and organize all this information in four main headings,
@@ -379,8 +380,7 @@ Conversation:
                                         print("Transcription Text: " +
                                             transcription.text);
 
-                                        String prompt2 =
-                                            """
+                                        String prompt2 = """
                   Extract the following information from this conversation:
                 
                   *Vital Signs:

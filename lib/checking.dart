@@ -1,267 +1,122 @@
-import 'package:aimedscribble/uitilities/aimodelservice.dart';
+import 'dart:convert';
+import 'package:aimedscribble/Secondapp/secrets.dart';
+import 'package:aimedscribble/uitilities/utils.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
+// import 'openai_service.dart';
 
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+class ChatGPTTest extends GetWidget {
+  TextEditingController transcription = TextEditingController();
 
-class ChatGPT {
-  final String openApiKey;
-
-  ChatGPT({required this.openApiKey});
-
-  Future<String?> generateText(String prompt) async {
-    try {
-      final response = await http.post(
-        Uri.parse('https://api.openai.com/v1/engines/text-davinci/completions'),
-        headers: {
-          'Authorization': 'Bearer $openApiKey',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'prompt': prompt,
-          'max_tokens': 1024,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final completion = jsonDecode(response.body)['choices'][0]['text'];
-        return completion;
-      } else {
-        print(
-            'Failed to generate text: ${response.statusCode} ${response.reasonPhrase}');
-        return null;
-      }
-    } catch (e) {
-      print('Exception: $e');
-      return null;
-    }
-  }
-}
-
-// Usage:
-
-// final chatGPT = ChatGPT(openApiKey: OPEN_API_KEY);
-
-// final generatedText = await chatGPT.generateText('Write a poem about a cat.');
-
-// if (generatedText != null) {
-//   print(generatedText);
-// } else {
-//   print('Failed to generate text');
-// }
-
-// Usage:
-
-class MyApp2 extends StatefulWidget {
-  const MyApp2({super.key});
-
-  @override
-  State<MyApp2> createState() => _MyApp2State();
-}
-
-class _MyApp2State extends State<MyApp2> {
-  final chatGPT = ChatGPT(openApiKey: OPEN_API_KEY);
-
-  String generatedText = '';
-
-  void generateText() async {
-    String? text = await chatGPT.generateText('Write a poem about a cat.');
-    generatedText = text.toString();
-    if (generatedText != "") {
-      print(generatedText);
-    } else {
-      print('Failed to generate text');
-    }
-
-    setState(() {});
-  }
-
+  final responseText = ''.obs;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('ChatGPT Demo'),
-      ),
-      body: Center(
-        child: Text(generatedText),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: generateText,
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class SpeechScreen extends StatefulWidget {
-  @override
-  _SpeechScreenState createState() => _SpeechScreenState();
-}
-
-class _SpeechScreenState extends State<SpeechScreen> {
-  stt.SpeechToText? speech;
-  bool isListening = false;
-  String recognizedText = '';
-  String previousRecognizedText = '';
-  TextEditingController textEditingController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    speech = stt.SpeechToText();
-  }
-
-  void startListening() async {
-    if (!isListening) {
-      bool available = await speech!.initialize(
-        onStatus: (status) {
-          print('Speech recognition status: $status');
-          if (status == stt.SpeechToText.listeningStatus) {
-            setState(() {
-              isListening = true;
-            });
-          } else {
-            print('Speech recognition status: $status');
-            setState(() {
-              isListening = false;
-            });
-            print('Speech listenContinuously start: $status');
-            // startListening();
-          }
-        },
-        onError: (error) {
-          print('Speech recognition error: ${error}');
-          showErrorSnackbar(error.errorMsg);
-          setState(() {
-            isListening = false;
-          });
-          Future.delayed(Duration(seconds: 1), () {
-            if (!isListening) {
-              startListening();
-            }
-          });
-          // startListening(); // This line restarts listening after an error occurs.
-        },
-      );
-
-      if (available) {
-        print('Listening started...');
-        setState(() {
-          isListening = true;
-        });
-
-        speech!.listen(
-          listenFor: Duration(minutes: 10),
-          onResult: (result) {
-            setState(() {
-              recognizedText = "";
-              for (final alternate in result.alternates) {
-                recognizedText += alternate.recognizedWords + ' ';
-              }
-            });
-          },
-        );
-      }
-    }
-  }
-
-  void listenContinuously() {
-    if (isListening) {
-      speech!.listen(
-        listenFor: Duration(minutes: 10),
-        listenMode: stt.ListenMode.dictation,
-        onResult: (result) {
-          setState(() {
-            recognizedText = "";
-
-            for (final alternate in result.alternates) {
-              recognizedText += alternate.recognizedWords + ' ';
-            }
-          });
-        },
-        cancelOnError: false,
-      );
-    }
-  }
-
-  void stopListening() {
-    if (isListening) {
-      print('Listening stopped.');
-      setState(() {
-        isListening = false;
-        previousRecognizedText += recognizedText;
-        textEditingController.text = previousRecognizedText;
-      });
-      speech!.stop();
-    }
-  }
-
-  void clearText() {
-    setState(() {
-      recognizedText = '';
-      previousRecognizedText = '';
-      textEditingController.text = '';
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Speech to Text')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: textEditingController,
-              onChanged: (text) {
-                previousRecognizedText = text;
-              },
-              style: TextStyle(fontSize: 24),
-              textAlign: TextAlign.left,
-              readOnly: false,
-              maxLines: null,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Recognized Text',
-              ),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('OpenAI Flutter Example'),
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: transcription,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // getOpenAIResponse,
+                  },
+                  child: Text('Get OpenAI Response'),
+                ),
+                SizedBox(height: 20),
+                Obx(() => Text(responseText.value)),
+              ],
             ),
-            SizedBox(height: 20),
-            Text(recognizedText),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: isListening ? stopListening : startListening,
-              child: Text(isListening ? 'Stop Listening' : 'Start Listening'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: clearText,
-              child: Text('Clear Text'),
-            ),
-            SizedBox(height: 20),
-            Text(
-              isListening ? 'Listening...' : 'Not Listening',
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-void showErrorSnackbar(String message) {
-  Get.snackbar(
-    'Error',
-    message,
-    snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: Colors.red,
-    colorText: Colors.white,
-    duration: Duration(seconds: 3),
-  );
+getOpenAIResponse(
+  transcription,
+) async {
+  try {
+    String prompt = """
+                Generate SOAP (*Subjective, *Objective, *Assessment, *Plan) notes in short from the following conversation between a doctor and a patient:
+                
+                Note: Your ability to accurately capture and organize all this information in four main headings,
+
+this is the four main Headings:
+
+                *Subjective,
+
+                *Objective,
+
+                *Assessment,
+
+                *Plan 
+
+
+
+Conversation:
+                ${transcription.text.toString()}
+
+                """;
+    final OpenAIService openaiService = OpenAIService("$apikey");
+
+    String response = await openaiService.getResponse(prompt.toString());
+
+    // transcription.text = response;
+    return response;
+  } catch (e) {
+    print(e.toString());
+  }
+}
+
+class OpenAIService {
+  final String apiKey;
+
+  OpenAIService(this.apiKey);
+
+  Future<String> getResponse(String userMessage) async {
+    try {
+      print('Sending request to OpenAI API...');
+      var url = Uri.parse('https://api.openai.com/v1/chat/completions');
+      var headers = {
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/json',
+      };
+
+      var requestBody = jsonEncode({
+        "model": "gpt-3.5-turbo",
+        "messages": [
+          {"role": "system", "content": "Hello, ChatGPT!"},
+          {"role": "user", "content": userMessage},
+        ],
+      });
+
+      print('Request Body: $requestBody');
+
+      var response = await http.post(url, headers: headers, body: requestBody);
+
+      if (response.statusCode == 200) {
+        print('Response received from OpenAI API.');
+        var jsonResponse = jsonDecode(response.body);
+        return jsonResponse['choices'][0]['message']['content'];
+      } else {
+        print(
+            'Error response from OpenAI API. Status Code: ${response.statusCode}');
+        throw Exception('Failed to get response from OpenAI API');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Error in getting response from OpenAI API');
+    }
+  }
 }
