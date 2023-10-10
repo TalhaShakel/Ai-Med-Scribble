@@ -43,35 +43,13 @@ class ChatGPTTest extends GetWidget {
   }
 }
 
-getOpenAIResponse(
-  transcription,
-) async {
+getOpenAIResponse( prompt) async {
   try {
-    String prompt = """
-                Generate SOAP (*Subjective, *Objective, *Assessment, *Plan) notes in short from the following conversation between a doctor and a patient:
-                
-                Note: Your ability to accurately capture and organize all this information in four main headings,
-
-this is the four main Headings:
-
-                *Subjective,
-
-                *Objective,
-
-                *Assessment,
-
-                *Plan 
-
-
-
-Conversation:
-                ${transcription.text.toString()}
-
-                """;
+   
     final OpenAIService openaiService = OpenAIService("$apikey");
 
-    String response = await openaiService.getResponse(prompt.toString());
-
+    String response = await openaiService.getResponse("$prompt");
+    print(response);
     // transcription.text = response;
     return response;
   } catch (e) {

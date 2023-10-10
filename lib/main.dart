@@ -26,28 +26,36 @@ void main() async {
 }
 
 void configLoading() {
-  EasyLoading.instance
-    ..indicatorType = EasyLoadingIndicatorType
-        .fadingCircle // Customize indicator type if needed
-    ..loadingStyle = EasyLoadingStyle.custom // Set the loading style to custom
-    ..indicatorColor = Colors.blue // Set the indicator color to blue
-    ..backgroundColor = Colors.transparent // Set the background color
-    ..textColor = Colors.blueAccent // Set the text color to blue
-    ..maskColor = Colors.black.withOpacity(0.5);
   // EasyLoading.instance
-  //   ..displayDuration = const Duration(milliseconds: 2000)
+  //   ..loadingStyle = EasyLoadingStyle.custom
   //   ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-  //   ..loadingStyle = EasyLoadingStyle.dark
-  //   ..indicatorSize = 45.0
-  //   ..radius = 10.0
-  //   ..progressColor = Colors.yellow
-  //   ..backgroundColor = Colors.green
-  //   ..indicatorColor = Colors.yellow
-  //   ..textColor = Colors.yellow
-  //   ..maskColor = Colors.blue.withOpacity(0.5)
-  //   ..userInteractions = true
-  //   ..dismissOnTap = false
-  //   ..customAnimation = CustomAnimation();
+  //   ..maskColor = Colors.blue.withOpacity(0.5) // Adjust the opacity as needed
+  //   ..backgroundColor =
+  //       Colors.transparent // Set the background color to be transparent
+  //   ..textColor = Colors.white
+  //   ..maskType = EasyLoadingMaskType.custom;
+  // EasyLoading.instance
+  //   ..indicatorType = EasyLoadingIndicatorType
+  //       .fadingCircle // Customize indicator type if needed
+  //   ..loadingStyle = EasyLoadingStyle.custom // Set the loading style to custom
+  //   ..indicatorColor = Colors.blue // Set the indicator color to blue
+  //   ..backgroundColor = Colors.transparent // Set the background color
+  //   ..textColor = Colors.blueAccent // Set the text color to blue
+  //   ..maskColor = Colors.black.withOpacity(0.5);
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 10.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false
+    ..customAnimation = CustomAnimation();
 }
 
 class CustomAnimation extends EasyLoadingAnimation {

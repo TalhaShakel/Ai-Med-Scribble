@@ -1,14 +1,60 @@
+import 'dart:convert';
+import 'dart:html';
+import 'dart:typed_data';
+
+import 'package:aimedscribble/uitilities/contant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class SpeechController extends GetxController {
   TextEditingController transcription = TextEditingController();
+  TextEditingController soapnotes = TextEditingController();
+  TextEditingController vitalsController = TextEditingController();
+  TextEditingController cptController = TextEditingController();
+  TextEditingController dxController = TextEditingController();
+  Uint8List bytes = Uint8List(0);
+
   stt.SpeechToText? speech = stt.SpeechToText();
   bool isListening = false;
   int autoListenStart = 0;
   String recognizedText = "";
   String previousRecognizedText = "";
+
+  Future<void> generatePDF() async {
+    try {
+      print("Generating PDF...");
+      final document = PdfDocument();
+      var now = DateTime.now();
+      var formattedDate = "${now.year}-${now.month}-${now.day}";
+
+      pdftext = """
+Date: $formattedDate\n\n
+
+${soapnotes.text.trim()}\n\n\n\n
+${vitalsController.text.trim()}\n\n\n\n
+${cptController.text.trim()}\n\n\n\n
+${dxController.text.trim()}\n\n\n\n
+
+""";
+      document.pages.add().graphics.drawString(
+          pdftext, PdfStandardFont(PdfFontFamily.helvetica, 12),
+          brush: PdfSolidBrush(PdfColor(0, 0, 0)),
+          bounds: const Rect.fromLTWH(0, 0, 500, 900));
+
+      bytes = Uint8List.fromList(await document.save());
+      AnchorElement(
+          href:
+              "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
+        ..setAttribute("download", "report.pdf")
+        ..click();
+      document.dispose();
+      update();
+    } catch (e) {
+      print("Error generating PDF: $e");
+    }
+  }
 
   void startListening() async {
     // Get.snackbar("Speech recognition status: $isListening", "");

@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:aimedscribble/Secondapp/secrets.dart';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 
-String OPEN_API_KEY = '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';
+String OPEN_API_KEY = '$apikey';
 String BASE_URL = 'https://api.openai.com/v1/';
 
 Future<List<Chat>> submitGetChatsForm({
